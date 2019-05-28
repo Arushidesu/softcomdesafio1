@@ -19,7 +19,7 @@ namespace JsonParse.Controllers
         {
             string dir = System.IO.Directory.GetCurrentDirectory();
             var wc = new WebClient();
-            var json = wc.DownloadString(dir + @"\wwwroot\lib\json\contas.json");
+            var json = wc.DownloadString(@"https://raw.githubusercontent.com/softcomtecnologia/workwithus_step1/master/contas.json");
             wc.Encoding = Encoding.UTF8;
             Debug.WriteLine(json);
             var usuario = JsonConvert.DeserializeObject<Usuario>(json);
