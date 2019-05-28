@@ -1,0 +1,61 @@
+﻿{
+  "nome": "Carlos Carlão",
+  "email": "carlos@carlao.com",
+  "fone": "83988472514",
+  "contas": [
+    {
+      "titulo": "14/25-25",
+      "resumo": "Mensalidade academia",
+      "valor": 49.99,
+      "vencimento": "2019-09-01"
+    },
+    {
+      "titulo": "s/n",
+      "resumo": "Conta de agua",
+      "valor": 84.11,
+      "vencimento": "2019-07-01"
+    },
+    {
+      "titulo": "52",
+      "resumo": "Aluguel de carro",
+      "valor": 149.00,
+      "vencimento": "2019-01-01"
+    },
+    {
+      "titulo": "53",
+      "resumo": "Aluguel de carro",
+      "valor": 149.00,
+      "vencimento": "2019-02-01"
+    },
+    {
+      "titulo": "1",
+      "resumo": "Vacinas do cachorro que ficou doente após um passeio na praia",
+      "valor": 32.41,
+      "vencimento": "2019-05-01"
+    },
+    {
+      "titulo": "14/26",
+      "resumo": "Mensalidade academia",
+      "valor": 449.99,
+      "vencimento": "2019-04-01"
+    },
+    {
+      "titulo": "s/n",
+      "resumo": "Conta de luz",
+      "valor": 44.78,
+      "vencimento": "2019-12-25"
+    },
+    {
+      "titulo": "54",
+      "resumo": "Aluguel de carro",
+      "valor": 149.00,
+      "vencimento": "2019-03-01"
+    },
+    {
+      "titulo": "55",
+      "resumo": "Aluguel de carro",
+      "valor": 149.00,
+      "vencimento": "2019-04-01"
+    }
+  ]
+}
