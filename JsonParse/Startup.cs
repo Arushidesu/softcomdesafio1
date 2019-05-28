@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -32,6 +33,7 @@ namespace JsonParse
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            CultureInfo.CurrentCulture = new CultureInfo("pt-BR");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
