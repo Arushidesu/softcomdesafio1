@@ -20,8 +20,12 @@ namespace JsonParse.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
+            if (id > 0)
+            {
+                ViewData["usuario"] = _context.Usuario.Where(u => u.UsuarioId == id).ToList()[0].Nome;
+            }
             return View(await _context.Usuario.ToListAsync());
         }
 
@@ -39,6 +43,11 @@ namespace JsonParse.Controllers
             var contas = await contasquery
                 .Where(c => c.UsuarioId == id)
                 .ToListAsync();
+
+            if (contas.Count < 1)
+            {
+                return RedirectToAction("Index", "Usuarios", new { id = id });
+            }
 
             ViewData["UsuarioData"] = _context.Usuario.ToList().Find(u => u.UsuarioId == id);
             ViewData["common"] = contas.ToList().GroupBy(c => c.Resumo).OrderByDescending(g => g.Count()).Select(g => g.Key).First();
