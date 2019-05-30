@@ -9,23 +9,25 @@ using System.Net;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Hosting;
 using System.Text;
+using JsonParse.Data;
 
 namespace JsonParse.Controllers
 {
     public class HomeController : Controller
     {
 
+        private readonly ContasDbContext _context;
+
+        public HomeController(ContasDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
-            string dir = System.IO.Directory.GetCurrentDirectory();
-            var wc = new WebClient();
-            var json = wc.DownloadString(@"https://raw.githubusercontent.com/softcomtecnologia/workwithus_step1/master/contas.json");
-            wc.Encoding = Encoding.UTF8;
-            Debug.WriteLine(json);
-            var usuario = JsonConvert.DeserializeObject<Usuario>(json);
-            List<Conta> sortedContas = usuario.contas.OrderBy(c => c.vencimento).ToList();
-            usuario.contas = sortedContas;
-            ViewBag.Message = usuario;
+            ViewData["clientes"] = _context.Usuario.Count();
+            ViewData["contas"] = _context.Conta.Count();
+            ViewData["valores"] = _context.Conta.Sum(c => c.Valor).ToString("C");
             return View();
         }
 

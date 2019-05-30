@@ -1,0 +1,48 @@
+﻿@model IEnumerable<JsonParse.Models.Usuario>
+
+<h1>Lista dos seus clientes</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="align-middle">
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th class="align-middle">
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th class="align-middle">
+                @Html.DisplayNameFor(model => model.Fone)
+            </th>
+            <th class="align-middle">
+                <a class="btn btn-primary" asp-action="Create"><i class="fas fa-plus-circle"></i> Cadastrar</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.Fone)
+            </td>
+            <td class="align-middle">
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i> Ações
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.UsuarioId"><i class="fas fa-user-edit text-primary"></i> Editar</a>
+                        <a class="dropdown-item" asp-action="Details" asp-route-id="@item.UsuarioId"><i class="fas fa-file-invoice-dollar text-success"></i> Detalhes</a>
+                        <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.UsuarioId" onclick="return confirm('Você tem certeza disso?')"><i class="fas fa-trash text-danger"></i> Deletar</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
