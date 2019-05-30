@@ -35,7 +35,7 @@ namespace JsonParse
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddDbContext<ContasDbContext>(c => c.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ContasDbContext>(c => c.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             CultureInfo.CurrentCulture = new CultureInfo("pt-BR");
         }
 
