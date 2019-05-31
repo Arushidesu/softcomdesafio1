@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JsonParse.Data;
 using JsonParse.Models;
+using ReflectionIT.Mvc.Paging;
+using Microsoft.AspNetCore.Routing;
 
 namespace JsonParse.Controllers
 {
@@ -20,18 +22,34 @@ namespace JsonParse.Controllers
         }
 
         // GET: Usuarios
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index(int? id, string SearchString, int page = 1, string sortExpression = "Nome")
         {
             if (id > 0)
             {
                 ViewData["usuario"] = _context.Usuario.Where(u => u.UsuarioId == id).ToList()[0].Nome;
             }
-            return View(await _context.Usuario.ToListAsync());
+
+            var qry = _context.Usuario.AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(SearchString))
+            {
+                SearchString = SearchString.ToLower();
+                qry = qry.Where(c => c.Nome.ToLower().Contains(SearchString) | c.Email.ToLower().Contains(SearchString) | c.Fone.ToLower().Contains(SearchString));
+            }
+
+            var model = await PagingList.CreateAsync(qry, 5, page, sortExpression, "Nome");
+
+            model.RouteValue = new RouteValueDictionary {
+                { "SearchString", SearchString}
+            };
+
+            return View(model);
         }
 
 
         // GET: Usuarios/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string SearchString, int page = 1, string sortExpression = "Vencimento")
         {
             if (id == null)
             {
@@ -40,21 +58,34 @@ namespace JsonParse.Controllers
 
             var contasquery = _context.Conta.AsQueryable();
 
-            var contas = await contasquery
-                .Where(c => c.UsuarioId == id)
-                .ToListAsync();
+            var qry = contasquery
+                .Where(c => c.UsuarioId == id);
 
-            if (contas.Count < 1)
+            if (qry.ToList().Count < 1)
             {
                 return RedirectToAction("Index", "Usuarios", new { id = id });
             }
 
             ViewData["UsuarioData"] = _context.Usuario.ToList().Find(u => u.UsuarioId == id);
-            ViewData["common"] = contas.ToList().GroupBy(c => c.Resumo).OrderByDescending(g => g.Count()).Select(g => g.Key).First();
-            ViewData["max"] = contas.ToList().Max(c => c.Valor);
-            ViewData["min"] = contas.ToList().Min(c => c.Valor);
-            ViewData["countFuture"] = contas.ToList().Where(c => c.Vencimento >= DateTime.Now).Count();
-            return View(contas);
+            ViewData["total"] = qry.ToList().Count();
+            ViewData["common"] = qry.ToList().GroupBy(c => c.Resumo).OrderByDescending(g => g.Count()).Select(g => g.Key).First();
+            ViewData["max"] = qry.ToList().Max(c => c.Valor);
+            ViewData["min"] = qry.ToList().Min(c => c.Valor);
+            ViewData["countFuture"] = qry.ToList().Where(c => c.Vencimento >= DateTime.Now).Count();
+
+            if (!string.IsNullOrWhiteSpace(SearchString))
+            {
+                SearchString = SearchString.ToLower();
+                qry = qry.Where(c => c.Titulo.ToLower().Contains(SearchString) | c.Resumo.ToLower().Contains(SearchString) | c.Valor.ToString().Contains(SearchString) | c.Vencimento.ToString().Contains(SearchString));
+            }
+
+            var model = await PagingList.CreateAsync(qry, 5, page, sortExpression, "Vencimento");
+
+            model.RouteValue = new RouteValueDictionary {
+                { "SearchString",SearchString}
+            };
+
+            return View(model);
         }
 
         // GET: Usuarios/Create

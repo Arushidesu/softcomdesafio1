@@ -1,14 +1,27 @@
-﻿@model IEnumerable<JsonParse.Models.Conta>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<JsonParse.Models.Conta>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, Reflection.Mvc.Paging
 @{
     ViewData["title"] = "Detalhes de contas";
     var data = ViewBag.UsuarioData;
+    var total = ViewBag.total;
     var common = ViewBag.common;
     var max = ViewBag.max;
     var min = ViewBag.min;
     var countFuture = ViewBag.countFuture;
 }
 
-<h1 class="mb-4">Detalhamento de contas</h1>
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <h1 class="mb-4">Detalhamento de contas</h1>
+    </div>
+    <div class="mb-3 mb-md-0 col-sm-12 col-md-6 d-flex align-items-sm-start justify-content-sm-start align-items-md-center justify-content-md-end">
+        <form method="get" class="form-inline" asp-controller="Usuarios" asp-action="Details">
+            <input type="text" class="form-control mr-2" style="width: 140px;" name="SearchString" placeholder="Buscar por..." value="@Model.RouteValue["SearchString"]">
+            <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-sm-12 col-md-6 mb-3">
@@ -24,7 +37,8 @@
     <div class="col-sm-12 col-md-6 mb-3">
         <div class="card align-content-center h-100">
             <div class="card-body">
-                <h2 class="card-title">Detalhes de pagamentos</h2>
+                <h2 class="card-title">Detalhes de contas</h2>
+                <p class="card-text">Total de contas: @total</p>
                 <p class="card-text">Pagamento mais comum: @common</p>
                 <p class="card-text">Maior valor pago: @max.ToString("C")</p>
                 <p class="card-text">Menor valor pago: @min.ToString("C")</p>
@@ -41,21 +55,23 @@
         </button>
     </div>
 }
-
+@{
+    this.Model.Action = "Details";
+}
 <table class="table table-striped">
     <thead>
         <tr>
             <th class="align-middle">
-                @Html.DisplayNameFor(model => model.Titulo)
+                @Html.SortableHeaderFor(model => model.Titulo)
             </th>
             <th class="align-middle">
-                @Html.DisplayNameFor(model => model.Resumo)
+                @Html.SortableHeaderFor(model => model.Resumo)
             </th>
             <th class="align-middle">
-                @Html.DisplayNameFor(model => model.Valor)
+                @Html.SortableHeaderFor(model => model.Valor)
             </th>
             <th class="align-middle">
-                @Html.DisplayNameFor(model => model.Vencimento)
+                @Html.SortableHeaderFor(model => model.Vencimento)
             </th>
             <th class="align-middle">
                 <a class="btn btn-primary" asp-controller="Contas" asp-action="Create" asp-route-id="@data.UsuarioId"><i class="fas fa-plus-circle"></i> Cadastrar</a>
@@ -93,3 +109,7 @@
         }
     </tbody>
 </table>
+
+<nav aria-label="Cliente paging">
+    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+</nav>
