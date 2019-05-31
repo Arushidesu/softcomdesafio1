@@ -28,45 +28,6 @@ namespace JsonParse.Controllers
             return View(await contasDbContext.ToListAsync());
         }
 
-        // GET: Contas/Details/5
-        public async Task<IActionResult> Details(int? id, string SearchString, int page = 1, string sortExpression = "Vencimento")
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var contasquery = _context.Conta.AsQueryable();
-
-            var qry = contasquery
-                .Where(c => c.UsuarioId == id);
-
-            if (qry.ToList().Count < 1)
-            {
-                return RedirectToAction("Index", "Usuarios", new { id = id });
-            }
-
-            ViewData["UsuarioData"] = _context.Usuario.ToList().Find(u => u.UsuarioId == id);
-            ViewData["common"] = qry.ToList().GroupBy(c => c.Resumo).OrderByDescending(g => g.Count()).Select(g => g.Key).First();
-            ViewData["max"] = qry.ToList().Max(c => c.Valor);
-            ViewData["min"] = qry.ToList().Min(c => c.Valor);
-            ViewData["countFuture"] = qry.ToList().Where(c => c.Vencimento >= DateTime.Now).Count();
-
-            if (!string.IsNullOrWhiteSpace(SearchString))
-            {
-                SearchString = SearchString.ToLower();
-                qry = qry.Where(c => c.Titulo.ToLower().Contains(SearchString) | c.Resumo.ToLower().Contains(SearchString) | c.Valor.ToString().Contains(SearchString) | c.Vencimento.ToString().Contains(SearchString));
-            }
-
-            var model = await PagingList.CreateAsync(qry, 5, page, sortExpression, "Vencimento");
-
-            model.RouteValue = new RouteValueDictionary {
-                { "SearchString",SearchString}
-            };
-
-            return View(model);
-        }
-
         // GET: Contas/Create
         public IActionResult Create(int id)
         {
