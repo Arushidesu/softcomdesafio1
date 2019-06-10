@@ -9,6 +9,9 @@ using JsonParse.Data;
 using JsonParse.Models;
 using ReflectionIT.Mvc.Paging;
 using Microsoft.AspNetCore.Routing;
+using System.Net;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace JsonParse.Controllers
 {
@@ -31,6 +34,11 @@ namespace JsonParse.Controllers
         // GET: Contas/Create
         public IActionResult Create(int id)
         {
+            var wc = new WebClient();
+            var json = wc.DownloadString(@"http://worldclockapi.com/api/json/est/now");
+            Dictionary<string, string> jsonDes = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            //Debug.WriteLine(jsonDes["currentDateTime"]);
+            ViewData["Time"] = jsonDes["currentDateTime"];
             ViewData["UsuarioId"] = id;
             return View();
         }

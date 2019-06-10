@@ -3,15 +3,17 @@ using System;
 using JsonParse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace JsonParse.Migrations
 {
     [DbContext(typeof(ContasDbContext))]
-    partial class ContasDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190610182519_Add time")]
+    partial class Addtime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

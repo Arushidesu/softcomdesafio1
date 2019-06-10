@@ -1,6 +1,8 @@
 ﻿@model JsonParse.Models.Conta
 @{ 
     ViewData["title"] = "Cadastrar conta";
+    DateTime myTime = Convert.ToDateTime(ViewBag.Time);
+    string timeS = myTime.ToShortTimeString();
 }
 
 <h1>Cadastrar conta</h1>
@@ -28,6 +30,17 @@
                 <label asp-for="Vencimento" class="control-label"></label>
                 <input asp-for="Vencimento" class="form-control" />
                 <span asp-validation-for="Vencimento" class="text-danger"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-8">
+                    <label asp-for="Vencimento" class="control-label"></label>
+                    <input asp-for="Vencimento" class="form-control" />
+                    <span asp-validation-for="Vencimento" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="Hora" class="control-label"></label>
+                    <input asp-for="Hora" class="form-control mr-2" style="width: 140px;" name="Time" value="@timeS">
+                </div>
             </div>
             <div class="form-group">
                 <input asp-for="UsuarioId" type="hidden" value="@ViewBag.UsuarioId" />
